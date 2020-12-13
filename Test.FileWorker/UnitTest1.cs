@@ -71,14 +71,26 @@ namespace Test.FileWorker
         public void TestGetFiles()
         {
             string fileName = "11";
+            int[] ids = { 42, 44, 48};
             System.Data.DataTable table = storageDatabaseUtils.GetFiles(fileName);
             Assert.Equal(3, table.Rows.Count);
+            foreach (System.Data.DataRow row in table.Rows)
+            {
+                int fileId = (int) row[0];
+                Assert.True(Array.Exists(ids, id => id == fileId));
+            }
         }
         [Fact]
         public void TestGetFilesRandomName()
         {
             string fileName = "113234435";
             System.Data.DataTable table = storageDatabaseUtils.GetFiles(fileName);
+            Assert.Equal(0, table.Rows.Count);
+        }
+        [Fact]
+        public void TestGetFilesEmptyName()
+        {
+            System.Data.DataTable table = storageDatabaseUtils.GetFiles();
             Assert.Equal(0, table.Rows.Count);
         }
     }
